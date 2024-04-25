@@ -50,7 +50,7 @@ void* CreateMultidimentionalMatrix(void* p, size_t size)
 template <typename MatrixType, typename ... Args>
 void* CreateMultidimentionalMatrix(void* p, size_t size, Args ... args)
 {
-    size_t pointerSize = size * sizeof(void**);
+    size_t pointerSize = size * sizeof(void*);
 
     p = ReserveMemory(pointerSize);
 
