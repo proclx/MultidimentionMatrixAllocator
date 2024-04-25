@@ -80,9 +80,83 @@ namespace MatrixTests
 		}
 		TEST_METHOD(_CreateMultidimentionalMatrix_2d)
 		{
+			_CrtMemState oldState;
+			_CrtMemState newState;
+			_CrtMemState diff;
+
+			_CrtMemState oldState1;
+			_CrtMemState newState1;
+			_CrtMemState diff1;
+
+			void* matrix2D = nullptr;
+			short** matrixOfShort = nullptr;
+
+			_CrtMemCheckpoint(&oldState);
+			matrix2D = CreateMultidimentionalMatrix<short>(matrix2D, 2, 3);
+			matrixOfShort = (short**)matrix2D;
+			_CrtMemCheckpoint(&newState);
+
+			_CrtMemDifference(&diff, &oldState, &newState);
+
+			Assert::AreEqual(diff.lTotalCount, 20ull + sizeof(void*));
+
+			_CrtMemCheckpoint(&oldState1);
+			FreeMemory(matrix2D, 2, 3);
+			_CrtMemCheckpoint(&newState1);
+
+			_CrtMemDifference(&diff1, &oldState1, &newState1);
+			Assert::AreEqual(diff1.lTotalCount, 0ull);
+		}
+		TEST_METHOD(_CreateMultidimentionalMatrix_3d)
+		{
+			_CrtMemState oldState;
+			_CrtMemState newState;
+			_CrtMemState diff;
+
+			_CrtMemState oldState1;
+			_CrtMemState newState1;
+			_CrtMemState diff1;
+
 			void* matrix3D = nullptr;
-			matrix3D = CreateMultidimentionalMatrix<int>(matrix3D, 2, 3, 4);
-			int*** matrixOfInt = (int***)matrix3D;
+			short*** matrixOfShort = nullptr;
+
+			_CrtMemCheckpoint(&oldState);
+			matrix3D = CreateMultidimentionalMatrix<short>(matrix3D, 2, 2, 2);
+			matrixOfShort = (short***)matrix3D;
+			_CrtMemCheckpoint(&newState);
+
+			_CrtMemDifference(&diff, &oldState, &newState);
+
+			Assert::AreEqual(diff.lTotalCount, 2ull * 2 * 2 + 6 * sizeof(void*) + sizeof(void*));
+
+			_CrtMemCheckpoint(&oldState1);
+			FreeMemory(matrix3D, 2, 2, 2);
+			_CrtMemCheckpoint(&newState1);
+
+			_CrtMemDifference(&diff1, &oldState1, &newState1);
+			Assert::AreEqual(diff1.lTotalCount, 0ull);
+		}
+		TEST_METHOD(_2dMatrixIsOK)
+		{
+			void* matrix2D = nullptr;
+			matrix2D = CreateMultidimentionalMatrix<short>(matrix2D, 2, 3);
+			short** matrixOfShort = (short**)matrix2D;
+
+			for (unsigned i = 0; i < 2; ++i)
+			{
+				for (unsigned j = 0; j < 3; ++j)
+				{
+					matrixOfShort[i][j] = (i + j);
+				}
+			}
+
+			for (unsigned i = 0; i < 2; ++i)
+			{
+				for (unsigned j = 0; j < 3; ++j)
+				{
+					Assert::AreEqual(matrixOfShort[i][j], (short)(i + j));
+				}
+			}
 		}
 	};
 }

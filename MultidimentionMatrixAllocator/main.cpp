@@ -5,43 +5,26 @@ using namespace std;
 
 int main() 
 {
-    void* matrix3D = nullptr;
-    matrix3D = CreateMultidimentionalMatrix<int>(matrix3D, 2, 3, 4);
-    int*** matrixOfInt = (int***)matrix3D;
+	void* matrix2D = nullptr;
+	matrix2D = CreateMultidimentionalMatrix<short>(matrix2D, 2, 3);
+	short** matrixOfShort = (short**)matrix2D;
 
-    for (unsigned i = 0; i < 2; ++i)
-    {
-        for (unsigned j = 0; j < 3; ++j)
-        {
-            for (unsigned k = 0; k < 4; ++k)
-            {
-                matrixOfInt[i][j][k] = 1;
-            }
-        }
-    }
+	for (unsigned i = 0; i < 2; ++i)
+	{
+		for (unsigned j = 0; j < 3; ++j)
+		{
+			matrixOfShort[i][j] = (i + j);
+		}
+	}
 
-    for (unsigned i = 0; i < 2; ++i)
-    {
-        for (unsigned j = 0; j < 3; ++j)
-        {
-            for (unsigned k = 0; k < 4; ++k)
-            {
-                std::cout << matrixOfInt[i][j][k] << ' ';
-            }
-        }
-    }
-
-    _CrtMemState oldState;
-    _CrtMemState newState;
-    _CrtMemState diff;
-
-    _CrtMemCheckpoint(&oldState);
-    FreeMemory(matrixOfInt, 2, 3, 4);
-    _CrtMemCheckpoint(&newState);
-
-    _CrtMemDifference(&diff, &newState, &oldState);
-
-    std::cout << diff.lTotalCount << std::endl;
+	for (unsigned i = 0; i < 2; ++i)
+	{
+		for (unsigned j = 0; j < 3; ++j)
+		{
+			std::cout << matrixOfShort[i][j] << ' ';
+		}
+		std::cout << std::endl;
+	}
 
     return 0;
 }
